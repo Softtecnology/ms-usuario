@@ -1,0 +1,19 @@
+
+services:
+  # Servicio para la base de datos PostgreSQL
+  db:
+    image: postgres:15 # Usa una imagen oficial de PostgreSQL
+    container_name: users_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres # Usuario de la base de datos
+      POSTGRES_PASSWORD:  G9vqSUukJ
+      POSTGRES_DB: users_db # Nombre de la base de datos
+    ports:
+      - "5432:5432" # Mapea el puerto del contenedor al de tu máquina
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      # --- Línea agregada para cargar los datos iniciales ---
+      - ./init-db:/docker-entrypoint-initdb.d
+volumes:
+  postgres-data:
