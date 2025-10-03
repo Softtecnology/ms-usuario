@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     password_hash VARCHAR(255) NOT NULL,
     telefono VARCHAR(20),
     rol VARCHAR(50) NOT NULL CHECK (rol IN ('SuperAdmin', 'Administrador', 'Propietario', 'Arrendatario', 'Guardia', 'Agente', 'Cliente')),
-    activo BOOLEAN DEFAULT true,
+    activo BOOLEAN DEFAULT false,
     fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT now(),
     ultimo_acceso TIMESTAMPTZ
 );

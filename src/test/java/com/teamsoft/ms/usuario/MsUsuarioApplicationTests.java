@@ -1,10 +1,10 @@
-package com.teamsoft.ms.usuarios;
+package com.teamsoft.ms.usuario;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GestorInmobiliarioApplicationTests {
+class MsUsuarioApplicationTests {
 
 	@Test
 	void contextLoads() {

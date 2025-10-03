@@ -1,7 +1,7 @@
-package com.teamsoft.ms.usuarios.service;
+package com.teamsoft.ms.usuario.service;
 
-import com.teamsoft.ms.usuarios.entities.Usuario;
-import com.teamsoft.ms.usuarios.repository.UsuarioRepository;
+import com.teamsoft.ms.usuario.entities.Usuario;
+import com.teamsoft.ms.usuario.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 public class UsuarioService {
-
+    
     @Autowired
     private UsuarioRepository usuarioRepository;
 

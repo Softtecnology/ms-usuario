@@ -1,4 +1,4 @@
-package com.teamsoft.ms.usuarios.security;
+package com.teamsoft.ms.usuario.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

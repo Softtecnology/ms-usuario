@@ -1,13 +1,13 @@
-package com.teamsoft.ms.usuarios;
+package com.teamsoft.ms.usuario;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GestorInmobiliarioApplication {
+public class MsUsuarioApplication {
 
 	public static void main(String[] args) {
-        SpringApplication.run(GestorInmobiliarioApplication.class, args);
+        SpringApplication.run(MsUsuarioApplication.class, args);
 	}
 
 }

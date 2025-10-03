@@ -1,4 +1,4 @@
-package com.teamsoft.ms.usuarios.entities;
+package com.teamsoft.ms.usuario.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

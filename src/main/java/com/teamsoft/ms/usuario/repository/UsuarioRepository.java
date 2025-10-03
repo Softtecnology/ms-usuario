@@ -1,6 +1,6 @@
-package com.teamsoft.ms.usuarios.repository;
+package com.teamsoft.ms.usuario.repository;
 
-import com.teamsoft.ms.usuarios.entities.Usuario;
+import com.teamsoft.ms.usuario.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

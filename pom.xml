@@ -12,7 +12,7 @@
 	<artifactId>ms-usuario</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-usuario</name>
-	<description>Gestor Inmobiliario y de Propiedad Horizontal</description>
+	<description>adsdasdasd</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -55,6 +55,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+            <scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
