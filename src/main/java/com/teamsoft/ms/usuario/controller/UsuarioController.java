@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
@@ -31,7 +30,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable UUID id, @RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
         Optional<Usuario> usuarioActualizadoOpt = usuarioService.actualizarUsuario(id, usuario);
 
         // Si el servicio actualizó el usuario, retorna 200 OK con el usuario actualizado
@@ -47,7 +46,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable UUID id) {
+    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable long id) {
         return usuarioService.obtenerUsuarioPorId(id)
                 .map(usuario -> new ResponseEntity<>(usuario, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

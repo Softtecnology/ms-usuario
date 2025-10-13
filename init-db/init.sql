@@ -1,176 +1,201 @@
 /*==============================================================*/
 /* BORRADO DE LAS TABLAS                                        */
 /*==============================================================*/
-DROP TABLE IF EXISTS DETALLE_USUARIO;
-DROP TABLE IF EXISTS ROL_PERMISO;
-DROP TABLE IF EXISTS PERMISO;
-DROP TABLE IF EXISTS USUARIO;
-DROP TABLE IF EXISTS ROL;
-DROP TABLE IF EXISTS TIPO_DOCUMENTO;
+DROP TABLE IF EXISTS USER_DETAIL;
+DROP TABLE IF EXISTS PERMISSION_ROLE;
+DROP TABLE IF EXISTS PERMISSION;
+DROP TABLE IF EXISTS USER_APP;
+DROP TABLE IF EXISTS ROLE;
+DROP TABLE IF EXISTS DOCUMENT_TYPE;
 
 
 /*==============================================================*/
-/* Table: TIPO_DOCUMENTO                                        */
+/* Table: DOCUMENT_TYPE                                        */
 /*==============================================================*/
-CREATE TABLE TIPO_DOCUMENTO (
-   TIPODOCUMENTO_ID     BIGSERIAL           NOT NULL,
-   DESCRIPCION          VARCHAR(50)         NULL,
-   ESTADO               BOOLEAN             NOT NULL DEFAULT TRUE,
-   CONSTRAINT PK_TIPO_DOCUMENTO PRIMARY KEY (TIPODOCUMENTO_ID)
+CREATE TABLE DOCUMENT_TYPE (
+   DOCUMENT_TYPE_ID     BIGSERIAL           NOT NULL,
+   DESCRIPTION          VARCHAR(50)         NULL,
+   STATUS               BOOLEAN             NOT NULL DEFAULT TRUE,
+   CONSTRAINT PK_DOCUMENT_TYPE PRIMARY KEY (DOCUMENT_TYPE_ID)
 );
 
 /*==============================================================*/
-/* Table: ROL                                                   */
+/* Table: ROLE                                                   */
 /*==============================================================*/
-CREATE TABLE ROL (
-   ROL_ID               BIGSERIAL           NOT NULL,
-   NOMBRE_ROL           VARCHAR(50)         NOT NULL,
-   DESCRIPCION          VARCHAR(255)        NULL,
-   ESTADO               BOOLEAN             NOT NULL DEFAULT TRUE,
-   CONSTRAINT PK_ROL PRIMARY KEY (ROL_ID)
+CREATE TABLE ROLE (
+   ROLE_ID               BIGSERIAL           NOT NULL,
+   ROLE_NAME           VARCHAR(50)         NOT NULL,
+   DESCRIPTION          VARCHAR(255)        NULL,
+   STATUS               BOOLEAN             NOT NULL DEFAULT TRUE,
+   CONSTRAINT PK_ROLE PRIMARY KEY (ROLE_ID)
 );
 
 /*==============================================================*/
-/* Table: USUARIO                                               */
+/* Table: USER_APP                                               */
 /*==============================================================*/
-CREATE TABLE USUARIO (
-   USUARIO_ID           BIGSERIAL           NOT NULL,
-   ROL_ID               BIGINT              NOT NULL,
+CREATE TABLE USER_APP (
+   USER_APP_ID           BIGSERIAL           NOT NULL,
+   ROLE_ID               BIGINT              NOT NULL,
    EMAIL                VARCHAR(255)        NOT NULL UNIQUE,
    PASSWORD             VARCHAR(255)        NOT NULL,
-   FECHA_CREACION       TIMESTAMP           NOT NULL DEFAULT NOW(),
-   FECHA_ACTUALIZACION  TIMESTAMP           NULL,
-   ESTADO               BOOLEAN             NOT NULL DEFAULT TRUE,
-   CONSTRAINT PK_USUARIO PRIMARY KEY (USUARIO_ID)
+   CREATION_DATE       TIMESTAMP           NOT NULL DEFAULT NOW(),
+   UPDATE_DATE  TIMESTAMP           NULL,
+   STATUS              BOOLEAN             NOT NULL DEFAULT TRUE,
+   CONSTRAINT PK_USER_APP PRIMARY KEY (USER_APP_ID)
 );
 
 /*==============================================================*/
-/* Table: DETALLE_USUARIO                                       */
+/* Table: USER_DETAIL                                       */
 /*==============================================================*/
-CREATE TABLE DETALLE_USUARIO (
-   USUARIODETALLE_ID    BIGSERIAL           NOT NULL,
-   USUARIO_ID           BIGINT              NOT NULL,
-   TIPODOCUMENTO_ID     BIGINT              NOT NULL,
-   NUMEROIDENTIFICACION VARCHAR(20)         NOT NULL,
-   FECHANACIMIENTO      DATE                NOT NULL,
-   PRIMERNOMBRE         VARCHAR(50)         NOT NULL,
-   SEGUNDONOMBRE        VARCHAR(50)         NULL,
-   PRIMERAPELLIDO       VARCHAR(50)         NOT NULL,
-   SEGUNDOAPELLIDO      VARCHAR(50)         NULL,
-   DIRECCION            VARCHAR(250)        NULL,
-   CONSTRAINT PK_DETALLE_USUARIO PRIMARY KEY (USUARIODETALLE_ID)
+CREATE TABLE USER_DETAIL (
+   USER_DETAIL_ID    BIGSERIAL           NOT NULL,
+   USER_ID           BIGINT              NOT NULL,
+   DOCUMENTTYPE_ID     BIGINT              NOT NULL,
+   IDENTIFICATIONNUMBER VARCHAR(20)         NOT NULL,
+   DATEOFBIRTH      DATE                NOT NULL,
+   FIRSTNAME         VARCHAR(50)         NOT NULL,
+   MIDDLENAME        VARCHAR(50)         NULL,
+   FIRSTLASTNAME       VARCHAR(50)         NOT NULL,
+   SECONDLASTNAME      VARCHAR(50)         NULL,
+   ADDRESS            VARCHAR(250)        NULL,
+   CONSTRAINT PK_USER_DETAIL PRIMARY KEY (USER_DETAIL_ID)
 );
 
 /*==============================================================*/
-/* Table: PERMISO                                               */
+/* Table: PERMISSION                                               */
 /*==============================================================*/
-CREATE TABLE PERMISO (
-   PERMISO_ID           BIGSERIAL           NOT NULL,
+CREATE TABLE PERMISSION (
+   PERMISSION_ID           BIGSERIAL           NOT NULL,
    -- RECOMENDACIÓN: Usar comillas dobles para palabras clave de SQL
    "READ"               BOOLEAN             NOT NULL,
    "WRITE"              BOOLEAN             NOT NULL,
    "UPDATE"             BOOLEAN             NOT NULL,
    "DELETE"             BOOLEAN             NOT NULL,
-   ESTADO               BOOLEAN             NOT NULL DEFAULT TRUE,
-   CONSTRAINT PK_PERMISO PRIMARY KEY (PERMISO_ID)
+   STATUS               BOOLEAN             NOT NULL DEFAULT TRUE,
+   CONSTRAINT PK_PERMISSION PRIMARY KEY (PERMISSION_ID)
 );
 
 /*==============================================================*/
-/* Table: ROL_PERMISO                                           */
+/* Table: PERMISSION_ROLE                                           */
 /*==============================================================*/
-CREATE TABLE ROL_PERMISO (
+CREATE TABLE PERMISSION_ROLE (
    -- RECOMENDACIÓN: Se elimina el ID autoincremental
-   ROL_ID               BIGINT              NOT NULL,
-   PERMISO_ID           BIGINT              NOT NULL,
+   ROLE_ID               BIGINT              NOT NULL,
+   PERMISSION_ID           BIGINT              NOT NULL,
    -- RECOMENDACIÓN: Se usa una llave primaria compuesta para garantizar unicidad
-   CONSTRAINT PK_ROL_PERMISO PRIMARY KEY (ROL_ID, PERMISO_ID)
+   CONSTRAINT PK_PERMISSION_ROLE PRIMARY KEY (ROLE_ID, PERMISSION_ID)
 );
 
 /*==============================================================*/
-/* DEFINICIÓN DE CLAVES FORÁNEAS                                */
+/* DEFINITION OF FOREIGN KEYS                                */
 /*==============================================================*/
 
-ALTER TABLE USUARIO
-   ADD CONSTRAINT FK_USUARIO_ROL FOREIGN KEY (ROL_ID)
-      REFERENCES ROL (ROL_ID)
+ALTER TABLE USER_APP
+   ADD CONSTRAINT FK_USER_APP_ROLE FOREIGN KEY (ROLE_ID)
+      REFERENCES ROLE (ROLE_ID)
       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE DETALLE_USUARIO
-   ADD CONSTRAINT FK_DETALLE_USUARIO FOREIGN KEY (USUARIO_ID)
-      REFERENCES USUARIO (USUARIO_ID)
+ALTER TABLE USER_DETAIL
+   ADD CONSTRAINT FK_USER_DETAIL FOREIGN KEY (USER_ID)
+      REFERENCES USER_APP (USER_APP_ID)
       ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE DETALLE_USUARIO
-   ADD CONSTRAINT FK_DETALLE_TIPO_DOC FOREIGN KEY (TIPODOCUMENTO_ID)
-      REFERENCES TIPO_DOCUMENTO (TIPODOCUMENTO_ID)
+ALTER TABLE USER_DETAIL
+   ADD CONSTRAINT FK_USER_DETAIL_DOC FOREIGN KEY (DOCUMENTTYPE_ID)
+      REFERENCES DOCUMENT_TYPE (DOCUMENT_TYPE_ID)
       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
--- CORRECCIÓN CRÍTICA: Se añaden las claves foráneas faltantes
-ALTER TABLE ROL_PERMISO
-   ADD CONSTRAINT FK_ROLPERMISO_ROL FOREIGN KEY (ROL_ID)
-      REFERENCES ROL (ROL_ID)
+
+ALTER TABLE PERMISSION_ROLE
+   ADD CONSTRAINT FK_PERMISSION_ROLE_ROLE FOREIGN KEY (ROLE_ID)
+      REFERENCES ROLE (ROLE_ID)
       ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE ROL_PERMISO
-   ADD CONSTRAINT FK_ROLPERMISO_PERMISO FOREIGN KEY (PERMISO_ID)
-      REFERENCES PERMISO (PERMISO_ID)
+ALTER TABLE PERMISSION_ROLE
+   ADD CONSTRAINT FK_PERMISSION_ROLE_PERMISSION FOREIGN KEY (PERMISSION_ID)
+      REFERENCES PERMISSION (PERMISSION_ID)
       ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 
 /*==============================================================*/
-/* SCRIPT DE DATOS SINTÉTICOS                                   */
+/* SYNTHETIC DATA SCRIPT                                        */
 /*==============================================================*/
 
 -- 1. Poblando tablas maestras (sin dependencias)
 
-INSERT INTO TIPO_DOCUMENTO (DESCRIPCION, ESTADO) VALUES
+-- Insertando los tipos de documento
+INSERT INTO DOCUMENT_TYPE (DESCRIPTION, STATUS) VALUES
 ('Cédula de Ciudadanía', true),
 ('Cédula de Extranjería', true),
 ('Pasaporte', true),
-('NIT', true);
+('NIT', true),
+('Permiso Especial de Permanencia', true);
 
-INSERT INTO ROL (NOMBRE_ROL, DESCRIPCION, ESTADO) VALUES
-('Administrador del Sistema', 'Acceso total a todas las funcionalidades del sistema.', true),
-('Gestor Inmobiliario', 'Puede gestionar propiedades, contratos y clientes.', true),
-('Cliente', 'Acceso limitado para ver propiedades y gestionar su información.', true);
+-- Insertando los roles solicitados
+INSERT INTO ROLE (ROLE_NAME, DESCRIPTION, STATUS) VALUES
+('SuperAdmin', 'Control total del sistema y permisos máximos.', true),
+('Administrador', 'Gestiona usuarios y configuraciones generales de la plataforma.', true),
+('Propietario', 'Dueño de una o más propiedades en el sistema.', true),
+('Arrendatario', 'Usuario que alquila una propiedad.', true),
+('Guardia', 'Personal de seguridad con acceso a bitácoras y alertas.', true),
+('Agente', 'Agente inmobiliario que gestiona propiedades y clientes.', true),
+('Cliente', 'Usuario interesado en propiedades, con acceso de solo lectura.', true);
 
-INSERT INTO PERMISO ("READ", "WRITE", "UPDATE", "DELETE", ESTADO) VALUES
--- Permiso 1: Control Total (para Administradores)
+-- Insertando tipos de permisos
+INSERT INTO PERMISSION ("READ", "WRITE", "UPDATE", "DELETE", STATUS) VALUES
+-- Permiso 1: Control Total
 (true, true, true, true, true),
--- Permiso 2: Gestión (para Gestores)
+-- Permiso 2: Gestión Completa (Sin Borrar)
 (true, true, true, false, true),
--- Permiso 3: Solo Lectura (para Clientes)
+-- Permiso 3: Solo Lectura
 (true, false, false, false, true);
 
 
--- 2. Poblando tablas dependientes
+-- 2. Poblando la tabla de unión PERMISSION_ROLE
 
--- NOTA: Se usa un hash BCrypt de ejemplo para la contraseña 'password123'.
--- En una aplicación real, este hash debe ser generado por el backend.
-INSERT INTO USUARIO (ROL_ID, EMAIL, PASSWORD, ESTADO) VALUES
--- Usuario 1 (Admin), Rol ID = 1
-(1, 'admin@inmobiliaria.com', '$2a$10$3zZ.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1', true),
--- Usuario 2 (Gestor), Rol ID = 2
-(2, 'gestor@inmobiliaria.com', '$2a$10$3zZ.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1', true),
--- Usuario 3 (Cliente), Rol ID = 3
-(3, 'cliente.ana@example.com', '$2a$10$3zZ.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1', true);
-
-
--- 3. Poblando tablas de unión y detalles
-
-INSERT INTO ROL_PERMISO (ROL_ID, PERMISO_ID) VALUES
--- Admin (Rol 1) tiene Control Total (Permiso 1)
+-- Asignando permisos a los roles
+INSERT INTO PERMISSION_ROLE (ROLE_ID, PERMISSION_ID) VALUES
+-- SuperAdmin (Rol 1) tiene Control Total (Permiso 1)
 (1, 1),
--- Gestor (Rol 2) tiene permisos de Gestión (Permiso 2)
+-- Administrador (Rol 2) tiene Gestión Completa (Permiso 2)
 (2, 2),
--- Cliente (Rol 3) tiene permisos de Solo Lectura (Permiso 3)
-(3, 3);
+-- Propietario (Rol 3) tiene Gestión Completa (Permiso 2)
+(3, 2),
+-- Arrendatario (Rol 4) tiene Solo Lectura (Permiso 3)
+(4, 3),
+-- Guardia (Rol 5) tiene Solo Lectura (Permiso 3)
+(5, 3),
+-- Agente (Rol 6) tiene Gestión Completa (Permiso 2)
+(6, 2),
+-- Cliente (Rol 7) tiene Solo Lectura (Permiso 3)
+(7, 3);
 
-INSERT INTO DETALLE_USUARIO (USUARIO_ID, TIPODOCUMENTO_ID, NUMEROIDENTIFICACION, FECHANACIMIENTO, PRIMERNOMBRE, SEGUNDONOMBRE, PRIMERAPELLIDO, SEGUNDOAPELLIDO, DIRECCION) VALUES
--- Detalles para Admin (Usuario 1), Tipo Doc: Cédula de Ciudadanía (ID 1)
-(1, 1, '1020304050', '1985-10-20', 'Carlos', 'Alberto', 'Ramírez', 'Gómez', 'Avenida Principal 123, Oficina 501'),
--- Detalles para Gestor (Usuario 2), Tipo Doc: Cédula de Extranjería (ID 2)
-(2, 2, '987654-X', '1992-03-15', 'Sofia', NULL, 'Vargas', 'Mora', 'Calle 45 # 15-30, Bogotá'),
--- Detalles para Cliente (Usuario 3), Tipo Doc: Pasaporte (ID 3)
-(3, 3, 'A0B1C2D3', '1998-07-01', 'Ana', 'Lucía', 'Martínez', 'López', 'Carrera 7 # 82-01, Apto 101');
+
+-- 3. Poblando la tabla USER_APP
+-- NOTA: La contraseña es un hash BCrypt de ejemplo para 'password123'.
+INSERT INTO USER_APP (ROLE_ID, EMAIL, PASSWORD, STATUS) VALUES
+-- Usuario 1: SuperAdmin
+(1, 'super.admin@inmobiliaria.com', '$2a$10$3zZ.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1', true),
+-- Usuario 2: Administrador
+(2, 'admin.principal@inmobiliaria.com', '$2a$10$3zZ.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1', true),
+-- Usuario 3: Propietario
+(3, 'juan.perez@email.com', '$2a$10$3zZ.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1', true),
+-- Usuario 4: Arrendatario
+(4, 'ana.gomez@email.com', '$2a$10$3zZ.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1', true),
+-- Usuario 5: Agente
+(6, 'carlos.rojas@inmobiliaria.com', '$2a$10$3zZ.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1Z.Y1', true);
+
+
+-- 4. Poblando la tabla USER_DETAIL
+INSERT INTO USER_DETAIL (USER_ID, DOCUMENTTYPE_ID, IDENTIFICATIONNUMBER, DATEOFBIRTH, FIRSTNAME, MIDDLENAME, FIRSTLASTNAME, SECONDLASTNAME, ADDRESS) VALUES
+-- Detalles para SuperAdmin (User 1), Doc: Cédula de Ciudadanía (ID 1)
+(1, 1, '1010101010', '1980-01-01', 'Admin', 'Root', 'System', 'Owner', 'Oficina Central, Calle 100 # 1-1'),
+-- Detalles para Administrador (User 2), Doc: Cédula de Extranjería (ID 2)
+(2, 2, 'CE-123456', '1988-05-12', 'Lucia', 'Isabel', 'Fernandez', 'Vega', 'Carrera 15 # 80-20'),
+-- Detalles para Propietario (User 3), Doc: Cédula de Ciudadanía (ID 1)
+(3, 1, '79888777', '1975-11-30', 'Juan', 'Carlos', 'Perez', 'Rodriguez', 'Calle Falsa 123, Apto 501'),
+-- Detalles para Arrendatario (User 4), Doc: Pasaporte (ID 3)
+(4, 3, 'A0B1C2D45', '1995-02-25', 'Ana', 'Maria', 'Gomez', 'Lopez', 'Avenida Siempre Viva 742'),
+-- Detalles para Agente (User 5), Doc: Cédula de Ciudadanía (ID 1)
+(5, 1, '1032456789', '1990-08-18', 'Carlos', 'Andres', 'Rojas', 'Mendoza', 'Transversal 5 # 45-90');

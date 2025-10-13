@@ -4,54 +4,47 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
-@Data //Genera de manera automatica los metodos getters y setters
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "usuarios")
+@Table(name = "user_app")
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "usuario_id")
-    private UUID usuarioId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_app_generator")
+    @SequenceGenerator(
+            name = "user_app_generator",
+            sequenceName = "user_app_user_app_id_seq", // <-- Nombre exacto de la secuencia en PostgreSQL
+            allocationSize = 1
+    )
+    @Column(name = "user_app_id")
+    private Long id;
 
-    @Column(name = "nombre", length = 100, nullable = false)
-    private String nombre;
-
-    @Column(name = "apellido", length = 100, nullable = false)
-    private String apellido;
-
-    @Column(name = "tipo_documento", length = 10, nullable = false)
-    private String tipoDocumento;
-
-    @Column(name = "numero_documento", length = 20, nullable = false, unique = true)
-    private String numeroDocumento;
+    @Column(name = "role_id", length = 100, nullable = false)
+    private Long roleId ;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-    @Column(name = "telefono", length = 20)
-    private String telefono;
+    @Column(name = "creation_date", nullable = false)
+    private Instant creationDate = Instant.now();
 
-    @Column(name = "rol", length = 50, nullable = false)
-    private String rol;
+    @UpdateTimestamp
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
 
-    @Column(name = "activo", nullable = false)
-    private Boolean activo = true;
-
-    @Column(name = "fecha_creacion", nullable = false)
-    private Instant fechaCreacion = Instant.now();
-
-    @Column(name = "ultimo_acceso")
-    private Instant ultimoAcceso;
+    @Column(name = "status", nullable = false)
+    private Boolean status = true;
 
 
 }
