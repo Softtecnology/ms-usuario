@@ -52,5 +52,12 @@ public class UsuarioController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Usuario> getUserByEmail(@PathVariable String email) {
+        return usuarioService.getUserByEmail(email)
+                .map(usuario -> new ResponseEntity<>(usuario, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
 
 }

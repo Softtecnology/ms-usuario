@@ -12,7 +12,7 @@
 	<artifactId>ms-usuario</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-usuario</name>
-	<description>adsdasdasd</description>
+	<description>Microservices for the user</description>
 	<url/>
 	<licenses>
 		<license/>

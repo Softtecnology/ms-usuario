@@ -33,6 +33,11 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
+    public Optional<Usuario> getUserByEmail(String email) {
+
+        return usuarioRepository.findByEmail(email);
+    }
+
     public Optional<Usuario> actualizarUsuario(Long id, Usuario usuarioActualizado) {
         // 1. Buscar el usuario existente por ID
         Optional<Usuario> usuarioExistenteOpt = usuarioRepository.findById(id);

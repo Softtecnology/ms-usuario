@@ -32,12 +32,12 @@ public class UserDetail {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_app_id", nullable = false)
-    private Long userApp;
+    private Usuario userApp;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "documenttype_id", nullable = false)
-    private Long documentType;
+    private DocumentType documentType;
 
 
     @Column(name = "identificationnumber", length = 20, nullable = false)
