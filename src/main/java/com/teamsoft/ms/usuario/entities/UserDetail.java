@@ -31,7 +31,7 @@ public class UserDetail {
 
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_app_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private Usuario userApp;
 
 
