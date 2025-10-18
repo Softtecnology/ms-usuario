@@ -35,4 +35,4 @@ jobs:
 
       - name: coverage report
         run: mvn verify
-        continue-on-error: true
+        continue-on-error: true 
