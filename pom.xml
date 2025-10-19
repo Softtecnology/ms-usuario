@@ -12,7 +12,7 @@
 	<artifactId>ms-usuario</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-usuario</name>
-	<description>MicroservicioUsuario</description>
+	<description>Microservices for the user</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -21,7 +21,7 @@
 		<developer/>
 	</developers>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

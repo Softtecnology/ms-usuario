@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UsuarioService {
@@ -21,7 +20,7 @@ public class UsuarioService {
 
     public Usuario crearUsuario(Usuario usuario) {
         // Encriptar la contraseña antes de guardarla con encoder
-        usuario.setPasswordHash(passwordEncoder.encode(usuario.getPasswordHash()));
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
     }
 
@@ -29,12 +28,17 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Optional<Usuario> obtenerUsuarioPorId(UUID id) {
+    public Optional<Usuario> obtenerUsuarioPorId(long id) {
 
         return usuarioRepository.findById(id);
     }
 
-    public Optional<Usuario> actualizarUsuario(UUID id, Usuario usuarioActualizado) {
+    public Optional<Usuario> getUserByEmail(String email) {
+
+        return usuarioRepository.findByEmail(email);
+    }
+
+    public Optional<Usuario> actualizarUsuario(Long id, Usuario usuarioActualizado) {
         // 1. Buscar el usuario existente por ID
         Optional<Usuario> usuarioExistenteOpt = usuarioRepository.findById(id);
 
@@ -47,18 +51,15 @@ public class UsuarioService {
         Usuario usuarioExistente = usuarioExistenteOpt.get();
 
         // 3. Actualizar los campos del usuario existente con los nuevos datos
-        usuarioExistente.setNombre(usuarioActualizado.getNombre());
-        usuarioExistente.setApellido(usuarioActualizado.getApellido());
-        usuarioExistente.setTipoDocumento(usuarioActualizado.getTipoDocumento());
-        usuarioExistente.setNumeroDocumento(usuarioActualizado.getNumeroDocumento());
+        usuarioExistente.setRoleId(usuarioActualizado.getRoleId());
         usuarioExistente.setEmail(usuarioActualizado.getEmail());
-        usuarioExistente.setTelefono(usuarioActualizado.getTelefono());
-        usuarioExistente.setRol(usuarioActualizado.getRol());
-        usuarioExistente.setActivo(usuarioActualizado.getActivo());
+        usuarioExistente.setCreationDate(usuarioActualizado.getCreationDate());
+        usuarioExistente.setUpdateDate(usuarioActualizado.getUpdateDate());
+        usuarioExistente.setStatus(usuarioActualizado.getStatus());
 
         // 4. Manejo especial para la contraseña: solo se actualiza si se proporciona una nueva
-        if (usuarioActualizado.getPasswordHash() != null && !usuarioActualizado.getPasswordHash().isEmpty()) {
-            usuarioExistente.setPasswordHash(passwordEncoder.encode(usuarioActualizado.getPasswordHash()));
+        if (usuarioActualizado.getPassword() != null && !usuarioActualizado.getPassword().isEmpty()) {
+            usuarioExistente.setPassword(passwordEncoder.encode(usuarioActualizado.getPassword()));
         }
 
         // 5. Guardar el usuario actualizado en la base de datos
