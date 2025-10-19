@@ -1,6 +1,6 @@
 # ---- Fase 1: Construcción (Build) ----
 # Usamos una imagen de Maven para compilar el proyecto Java
-FROM maven:3.8.5-openjdk-17 AS build
+FROM maven:3.8.5-openjdk-21 AS build
 
 # Establecemos el directorio de trabajo dentro del contenedor
 WORKDIR /app
@@ -9,12 +9,12 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
-# Copiamos el resto del código fuente y construimos el .jar
+# Copiamos el resto del codigo fuente y construimos el .jar
 COPY src ./src
 RUN mvn package -DskipTests
 
 # ---- Fase 2: Ejecución (Runtime) ----
-# Usamos una imagen ligera con solo el entorno de ejecución de Java
+# Usamos una imagen ligera con solo el entorno de ejecucion de Java
 FROM openjdk:17-jdk-slim
 
 # Establecemos el directorio de trabajo
