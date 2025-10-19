@@ -1,38 +1,46 @@
 name: Build and test
 
-
 on:
   pull_request:
     branches:
       - main
-      - develop
-  push:
-    branches:
-      - main
-      - develop
+      - development
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build:
+    name: Build and Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
-      - name: Code Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Java Setup
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
+          cache: 'maven'
 
-      - name: Build
-        run: mvn clean install -DskipTests
+      - name: Build and Test
+        run: mvn clean verify
 
-      - name: tests
-        run: mvn test
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/target/surefire-reports/*.xml'
 
-      - name: coverage report
-        run: mvn verify
-        continue-on-error: true
+      - name: Upload coverage report
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: '**/target/site/jacoco/'
